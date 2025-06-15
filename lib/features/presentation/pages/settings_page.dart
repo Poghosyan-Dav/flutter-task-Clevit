@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-class SettingsPage extends StatelessWidget {
+
+import '../widgets/base/base_stateless_widget.dart';
+class SettingsPage extends BaseStatelessWidget {
   const SettingsPage({super.key});
   @override
-  Widget build(BuildContext context) => const Center(child: Text('Settings Page'));}
+  Widget baseBuild(BuildContext context) => const Center(child: Text('Settings Page'));}

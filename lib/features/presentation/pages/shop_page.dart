@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-class ShopPage extends StatelessWidget {
+
+import '../widgets/base/base_stateless_widget.dart';
+class ShopPage extends BaseStatelessWidget {
   const ShopPage({super.key});
   @override
-  Widget build(BuildContext context) => const Center(child: Text('Shop Page'));
+  Widget baseBuild(BuildContext context) => const Center(child: Text('Shop Page'));
 }

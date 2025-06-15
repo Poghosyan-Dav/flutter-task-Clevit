@@ -47,6 +47,9 @@ dependencies:
   injectable_generator: ^2.7.0
   json_serializable: ^6.9.5
   rxdart: ^0.28.0
+  flutter_screenutil: ^5.9.3
+  flutter_svg: ^2.1.0
+  camera: ^0.11.1
 
 
 dev_dependencies:
@@ -104,10 +107,19 @@ flutter:
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
   assets:
+    - assets/images/Scan.svg
+    - assets/images/X.svg
     - assets/images/bottle_Max.png
     - assets/images/bottle_Min.png
     - assets/images/foreground_pathern.png
+    - assets/images/genuine_icon.svg
+    - assets/images/genuine_icon2.png
+    - assets/images/icon-button-notification.svg
+    - assets/images/settings.svg
+    - assets/images/shop.svg
     - assets/images/splash.png
+    - assets/images/squares_four.svg
+    - assets/images/vector.svg
     - assets/mock/bottles.json
   fonts:
     - family: EBGaramond-Bold

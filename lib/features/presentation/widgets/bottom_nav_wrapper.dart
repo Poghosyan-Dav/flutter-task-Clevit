@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_clevit_task/features/presentation/utilities/assets/app_assets.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
 class BottomNavWrapper extends StatelessWidget {
@@ -42,11 +44,11 @@ class BottomNavWrapper extends StatelessWidget {
         backgroundColor: Colors.black,
         selectedItemColor: Colors.white,
         unselectedItemColor: Colors.grey,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.qr_code_scanner), label: 'Scan'),
-          BottomNavigationBarItem(icon: Icon(Icons.collections_bookmark), label: 'Collection'),
-          BottomNavigationBarItem(icon: Icon(Icons.storefront), label: 'Shop'),
-          BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
+        items:  [
+          BottomNavigationBarItem(icon: SvgPicture.asset(AppAssets.scanBottomBarIcon), label: 'Scan'),
+          BottomNavigationBarItem(icon: SvgPicture.asset(AppAssets.squaresFourBottomBarIcon), label: 'Collection'),
+          BottomNavigationBarItem(icon: SvgPicture.asset(AppAssets.shopBottomBarIcon), label: 'Shop'),
+          BottomNavigationBarItem(icon: SvgPicture.asset(AppAssets.settingsBottomBarIcon), label: 'Settings'),
         ],
       ),
     );

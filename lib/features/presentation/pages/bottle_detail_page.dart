@@ -1,5 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_clevit_task/features/presentation/utilities/assets/app_assets.dart';
+import 'package:flutter_clevit_task/features/presentation/utilities/typography/text_theme.dart';
+import 'package:flutter_clevit_task/features/presentation/widgets/base/base_state.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import '../../domain/entities/bottle.dart';
+import '../bloc/collection_bloc.dart';
+import '../bloc/collection_event.dart';
 import 'tabs/info_tab.dart';
 import 'tabs/tasting_tab.dart';
 import 'tabs/history_tab.dart';
@@ -13,52 +22,53 @@ class BottleDetailPage extends StatefulWidget {
   State<BottleDetailPage> createState() => _BottleDetailPageState();
 }
 
-class _BottleDetailPageState extends State<BottleDetailPage> {
+class _BottleDetailPageState extends BaseState<BottleDetailPage> {
   int selectedIndex = 0;
-
   final List<String> tabs = ['Info', 'Tasting Notes', 'History'];
-
+   bool _isOpen = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: getColors(context).mainAppColor,
       body: SafeArea(
         child: Stack(
           children: [
             // Main Content
             SingleChildScrollView(
-              padding: const EdgeInsets.only(bottom: 100),
+              padding: EdgeInsets.only(bottom: 100.h),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   // Hero bottle image
+                  if (_isOpen)
                   Hero(
                     tag: widget.bottle.id,
-                    child: Image.network(
-                      widget.bottle.imageUrl,
-                      height: 300,
+                    child: Image.asset(
+                      AppAssets.bottleMinImage,
+                      height: 300.h,
                       fit: BoxFit.contain,
                     ),
                   ),
-                  const SizedBox(height: 12),
+                  SizedBox(height: 12.h),
 
                   // Title
+                  if (_isOpen)
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    padding: EdgeInsets.symmetric(horizontal: 16.w),
                     child: Text(
                       widget.bottle.title,
-                      style: const TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                      style: getFonts(context).ebGaramondBold.copyWith(
+                        fontSize: 22.sp,
+                        color: getColors(context).whiteColor,
                       ),
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: 8.h),
 
                   // Tabs
+                  if (_isOpen)
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    padding: EdgeInsets.symmetric(horizontal: 16.w),
                     child: Row(
                       children: List.generate(tabs.length, (index) {
                         final isSelected = index == selectedIndex;
@@ -66,18 +76,18 @@ class _BottleDetailPageState extends State<BottleDetailPage> {
                           child: GestureDetector(
                             onTap: () => setState(() => selectedIndex = index),
                             child: Container(
-                              padding: const EdgeInsets.symmetric(vertical: 10),
-                              margin: const EdgeInsets.symmetric(horizontal: 4),
+                              padding: EdgeInsets.symmetric(vertical: 10.h),
+                              margin: EdgeInsets.symmetric(horizontal: 4.w),
                               decoration: BoxDecoration(
-                                color: isSelected ? Colors.amber : Colors.grey.shade800,
-                                borderRadius: BorderRadius.circular(12),
+                                color: isSelected ? getColors(context).yellowColor : getColors(context).moodyGray,
+                                borderRadius: BorderRadius.circular(12.r),
                               ),
                               child: Center(
                                 child: Text(
                                   tabs[index],
-                                  style: TextStyle(
-                                    color: isSelected ? Colors.black : Colors.white,
-                                    fontWeight: FontWeight.w600,
+                                  style: getFonts(context).ebGaramondSemiBold?.copyWith(
+                                    color: isSelected ? getColors(context).blackColor : getColors(context).whiteColor,
+                                    fontSize: 14.sp,
                                   ),
                                 ),
                               ),
@@ -87,11 +97,11 @@ class _BottleDetailPageState extends State<BottleDetailPage> {
                       }),
                     ),
                   ),
-                  const SizedBox(height: 16),
-
+                  SizedBox(height: 16.h),
+                  if (_isOpen)
                   // Selected Tab Content
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    padding: EdgeInsets.symmetric(horizontal: 16.w),
                     child: _buildTabContent(),
                   ),
                 ],
@@ -99,31 +109,61 @@ class _BottleDetailPageState extends State<BottleDetailPage> {
             ),
 
             // Back Button
-            Positioned(
-              top: 10,
-              left: 10,
-              child: IconButton(
-                icon: const Icon(Icons.arrow_back, color: Colors.white),
-                onPressed: () => Navigator.of(context).pop(),
+            Positioned.fill(
+              top: 10.h,
+              right: 10.w,
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: Column(children:[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Genesis Collection'),
+
+                      IconButton(
+                        icon: SvgPicture.asset(AppAssets.closeImage),
+                        onPressed: ()=>context.pop(),
+                      )
+                    ],),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Image.asset(AppAssets.genuineIcon2),
+
+                      IconButton(
+                        icon: SvgPicture.asset(AppAssets.vectorTopBarIcon),
+                        onPressed: () {setState(() {
+                          _isOpen = !_isOpen;
+                        });},
+                      )
+                    ],)
+                ]),
+
               ),
             ),
-
+            if (_isOpen)
             // Bottom CTA
             Positioned(
-              bottom: 20,
-              left: 16,
-              right: 16,
+              bottom: 20.h,
+              left: 16.w,
+              right: 16.w,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.amber,
-                  foregroundColor: Colors.black,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  backgroundColor: getColors(context).yellowColor,
+                  foregroundColor: getColors(context).blackColor,
+                  padding: EdgeInsets.symmetric(vertical: 16.h),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.r),
+                  ),
                 ),
                 onPressed: () {
-                  // TODO: add to collection or other action
+                  context.read<CollectionBloc>().add(CollectionEvent.toggleFavorite(widget.bottle.id));
+
                 },
-                child: const Text('Add to my collection'),
+                child: Text(
+                  'Add to my collection',
+                  style: getFonts(context).ebGaramondBold.copyWith(fontSize: 16.sp),
+                ),
               ),
             )
           ],

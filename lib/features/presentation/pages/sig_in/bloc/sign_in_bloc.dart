@@ -5,24 +5,68 @@ import 'sign_in_state.dart';
 class SignInBloc extends Bloc<SignInEvent, SignInState> {
   SignInBloc() : super(SignInState.initial()) {
     on<EmailChanged>((event, emit) {
-      emit(state.copyWith(email: event.email));
+      emit(state.copyWith(
+        email: event.email,
+        errorMessage: null, // Clear error when email changes
+      ));
     });
 
     on<PasswordChanged>((event, emit) {
-      emit(state.copyWith(password: event.password));
+      emit(state.copyWith(
+        password: event.password,
+        errorMessage: null, // Clear error when password changes
+      ));
     });
 
     on<Submitted>((event, emit) async {
-      if (!_isValidEmail(state.email) || state.password.isEmpty) {
-        emit(state.copyWith(errorMessage: 'Invalid credentials',isSubmitting: false,
-          isSuccess: false,));
+      // Validate fields
+      if (state.email.isEmpty) {
+        emit(state.copyWith(
+          errorMessage: 'Email is required',
+          isSubmitting: false,
+          isSuccess: false,
+        ));
         return;
       }
 
-      emit(state.copyWith(isSubmitting: true, errorMessage: null,isSuccess: true));
-      await Future.delayed(const Duration(seconds: 1)); // mock auth
-      emit(state.copyWith(isSubmitting: false,isSuccess: false));
-      // Navigate or emit success state
+      if (!_isValidEmail(state.email)) {
+        emit(state.copyWith(
+          errorMessage: 'Please enter a valid email',
+          isSubmitting: false,
+          isSuccess: false,
+        ));
+        return;
+      }
+
+      if (state.password.isEmpty) {
+        emit(state.copyWith(
+          errorMessage: 'Password is required',
+          isSubmitting: false,
+          isSuccess: false,
+        ));
+        return;
+      }
+
+      emit(state.copyWith(
+        isSubmitting: true,
+        errorMessage: null,
+        isSuccess: false,
+      ));
+
+      await Future.delayed(const Duration(seconds: 1));
+
+      if (_isValidEmail(state.email) && state.password.isNotEmpty) {
+        emit(state.copyWith(
+          isSubmitting: false,
+          isSuccess: true,
+        ));
+      } else {
+        emit(state.copyWith(
+          isSubmitting: false,
+          isSuccess: false,
+          errorMessage: 'Invalid credentials',
+        ));
+      }
     });
   }
 

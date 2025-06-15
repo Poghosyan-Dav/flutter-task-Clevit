@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-class ScanPage extends StatelessWidget {
+import 'package:flutter_clevit_task/features/presentation/widgets/base/base_stateless_widget.dart';
+class ScanPage extends BaseStatelessWidget {
   const ScanPage({super.key});
   @override
-  Widget build(BuildContext context) => const Center(child: Text('Scan Page'));
+  Widget baseBuild(BuildContext context) => const Center(child: Text('Scan Page'));
 }

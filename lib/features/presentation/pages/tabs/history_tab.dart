@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_clevit_task/features/presentation/utilities/typography/text_theme.dart';
+import 'package:flutter_clevit_task/features/presentation/widgets/base/base_state.dart';
 import '../../../domain/entities/bottle.dart';
 
 class HistoryTab extends StatefulWidget {
@@ -10,109 +13,111 @@ class HistoryTab extends StatefulWidget {
   State<HistoryTab> createState() => _HistoryTabState();
 }
 
-class _HistoryTabState extends State<HistoryTab> with AutomaticKeepAliveClientMixin {
-  String selectedStyle = '';
-  String selectedType = '';
-
-  final List<String> styles = ['Highland', 'Islay', 'Lowland'];
-  final List<String> bottleTypes = ['Type A', 'Type B', 'Type C', 'Type D'];
-
+class _HistoryTabState extends BaseState<HistoryTab>
+    with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text('Style', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 8),
-          Wrap(
-            spacing: 12,
-            runSpacing: 12,
-            children: styles.map((style) {
-              final isSelected = style == selectedStyle;
-              return GestureDetector(
-                onTap: () => setState(() => selectedStyle = style),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                  decoration: BoxDecoration(
-                    color: isSelected ? Colors.amber : Colors.grey.shade900,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: isSelected ? Colors.amber : Colors.grey,
-                    ),
-                  ),
-                  child: Text(
-                    style,
-                    style: TextStyle(
-                      color: isSelected ? Colors.black : Colors.white,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              );
-            }).toList(),
-          ),
-          const SizedBox(height: 24),
-          const Text('Type', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 8),
-          GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: bottleTypes.length,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 4,
-              mainAxisSpacing: 8,
-              crossAxisSpacing: 8,
-              childAspectRatio: 1,
-            ),
-            itemBuilder: (context, index) {
-              final type = bottleTypes[index];
-              final isSelected = type == selectedType;
 
-              return GestureDetector(
-                onTap: () => setState(() => selectedType = type),
-                child: Container(
+    final historyItems = [
+      {
+        'label': 'Label',
+        'title': widget.bottle.distillery,
+        'description': '${widget.bottle.age} years, ${widget.bottle.country}'
+      },
+      {
+        'label': 'Label',
+        'title': widget.bottle.cask,
+        'description': '${widget.bottle.bottler}, ABV: ${widget.bottle.abv}'
+      }
+    ];
+
+    return ListView.builder(
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      itemCount: historyItems.length,
+      itemBuilder: (context, i) {
+        final item = historyItems[i];
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Timeline indicator
+            Column(
+              children: [
+                Container(
+                  width: 8.w,
+                  height: 8.w,
                   decoration: BoxDecoration(
-                    color: isSelected ? Colors.amber : Colors.grey.shade900,
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: isSelected ? Colors.amber : Colors.grey),
-                  ),
-                  alignment: Alignment.center,
-                  child: Text(
-                    type,
-                    style: TextStyle(
-                      color: isSelected ? Colors.black : Colors.white,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 12,
-                    ),
-                    textAlign: TextAlign.center,
+                    color: getColors(context).yellowColor,
+                    shape: BoxShape.circle,
                   ),
                 ),
-              );
-            },
-          ),
-          const SizedBox(height: 24),
-          ElevatedButton(
-            onPressed: () {
-              // Handle saving here
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text("Added to collection")),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.amber,
-              foregroundColor: Colors.black,
-              minimumSize: const Size.fromHeight(48),
+                if (i != historyItems.length - 1)
+                  Container(
+                    width: 2.w,
+                    height: 60.h,
+                    color: getColors(context).yellowColor,
+                  ),
+              ],
             ),
-            child: const Text('Add to my collection'),
-          ),
-        ],
-      ),
+            SizedBox(width: 12.w),
+            // Content
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    item['label']!,
+                    style: getFonts(context).ebGaramondSemiBold.copyWith(
+                      fontSize: 14.sp,
+                      color: getColors(context).whiteColor,
+                    ),
+                  ),
+                  SizedBox(height: 6.h),
+                  Text(
+                    item['title']!,
+                    style: getFonts(context).ebGaramondBold.copyWith(
+                      fontSize: 16.sp,
+                      color: getColors(context).whiteColor,
+                    ),
+                  ),
+                  SizedBox(height: 4.h),
+                  Text(
+                    item['description']!,
+                    style: getFonts(context).ebGaramondRegular.copyWith(
+                      fontSize: 12.sp,
+                      color: getColors(context).whiteColor.withOpacity(0.8),
+                    ),
+                  ),
+                  SizedBox(height: 8.h),
+                  Text(
+                    'Attachments',
+                    style: getFonts(context).ebGaramondMedium.copyWith(
+                      fontSize: 12.sp,
+                      color: getColors(context).whiteColor.withOpacity(0.8),
+                    ),
+                  ),
+                  SizedBox(height: 6.h),
+                  Row(
+                    children: List.generate(3, (index) {
+                      return Container(
+                        height: 50.h,
+                        width: 50.h,
+                        margin: EdgeInsets.only(right: 8.w),
+                        color: getColors(context).moodyGray,
+                      );
+                    }),
+                  ),
+                  SizedBox(height: 24.h),
+                ],
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

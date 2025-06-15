@@ -8,9 +8,18 @@ class AssetsRes {
 
   static const String PROJECT_NAME = 'flutter_clevit_task';
   static const String PROJECT_VERSION = '1.0.0+1';
+  static const String SCAN = 'assets/images/Scan.svg';
+  static const String X = 'assets/images/X.svg';
   static const String BOTTLE_MAX = 'assets/images/bottle_Max.png';
   static const String BOTTLE_MIN = 'assets/images/bottle_Min.png';
   static const String FOREGROUND_PATHERN = 'assets/images/foreground_pathern.png';
+  static const String GENUINE_ICON = 'assets/images/genuine_icon.svg';
+  static const String GENUINE_ICON2 = 'assets/images/genuine_icon2.png';
+  static const String ICON_BUTTON_NOTIFICATION = 'assets/images/icon-button-notification.svg';
+  static const String SETTINGS = 'assets/images/settings.svg';
+  static const String SHOP = 'assets/images/shop.svg';
   static const String SPLASH = 'assets/images/splash.png';
+  static const String SQUARES_FOUR = 'assets/images/squares_four.svg';
+  static const String VECTOR = 'assets/images/vector.svg';
   static const String BOTTLES = 'assets/mock/bottles.json';
 }
