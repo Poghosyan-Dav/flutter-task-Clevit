@@ -71,7 +71,7 @@ class _MyAppState extends BaseState<MyApp> {
     selectedItemColor: getColors(context).yellowColor,
     unselectedItemColor: getColors(context).whiteColor,
     ),
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
     color: getColors(context).boxColors,
     margin: EdgeInsets.all(8.r), // Responsive margin
     shape: RoundedRectangleBorder(
