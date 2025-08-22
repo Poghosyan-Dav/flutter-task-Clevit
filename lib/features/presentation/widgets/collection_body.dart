@@ -60,7 +60,7 @@ class CollectionBody extends BaseStatelessWidget {
                           color: getColors(context).boxColors,
                           child: Center(
                             child: Icon(
-                              Icons.liquor,
+                              Icons.water_drop,
                               color: getColors(context).whiteColor,
                               size: 40.w,
                             ),
